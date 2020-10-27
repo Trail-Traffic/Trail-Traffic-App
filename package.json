@@ -14,7 +14,12 @@
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.4.tar.gz",
     "react-native-maps": "^0.27.1",
+<<<<<<< HEAD
     "react-native-web": "~0.13.12"
+=======
+    "react-native-web": "~0.13.12",
+    "expo-location": "~9.0.0"
+>>>>>>> 4b1f5d4b4ed52af120c866921c870c423c49ed4b
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"
