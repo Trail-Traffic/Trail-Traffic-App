@@ -10,7 +10,10 @@ const publicKey = secret.publicKey;
 //assign API forecast ids to locations
 const locations = {
   switzerFalls: secret.sw_falls_id,
-  griffithPark: secret.griffith_park_id
+  griffithPark: secret.griffith_park_id,
+  elysianPark: secret.elysian_park_id,
+  eatonCanyon: secret.eaton_canyon_id,
+  runyonCanyon: secret.runyon_canyon_id
 }
 
 //convert units from the API measurement to the frontend Heatmap measurement
