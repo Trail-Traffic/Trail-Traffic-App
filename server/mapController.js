@@ -1,19 +1,38 @@
 const fetch = require('node-fetch');
+const secret = require('../secrets');
+
 const mapController = {};
 
-const privateKey = process.env.PRIVATE_KEY;
+//assign API keys to variables
+const privateKey = secret.privateKey;
+const publicKey = secret.publicKey;
+
+//assign API forecast ids to locations
 const locations = {
-  'Switzer Falls' : [process.env.SW_FALLS_VID, process.env.SW_FALLS_PK]
+  switzerFalls: secret.sw_falls_id,
+  griffithPark: secret.griffith_park_id
+}
+
+//convert units from the API measurement to the frontend Heatmap measurement
+const conversion = {
+  '-2': 10,
+  '-1': 30,
+  '0': 50,
+  '1': 70,
+  '2': 90
 }
 
 mapController.getHeat = (req, res, next) => {
-  fetch(`https://besttime.app/api/v1/venues?api_key_private=${privateKey}`)
+  //deconstruct request body to get desired location
+
+  //make fetch call to API
+  fetch(`https://besttime.app/api/v1/forecasts/now?api_key_public=${publicKey}&venue_id=${locations.griffithPark}`)
     .then(data => {
-      console.log('private key ', privateKey)
       data.json()
         .then(parsedData => {
-          console.log(parsedData);
-          res.locals.data = parsedData[0];
+          //the returned intensity variable rates traffic on a scale from -2 to 2, and 999 indicates the trail is closed
+          const intensity = conversion[parsedData.analysis.hour_analysis.intensity_nr];
+          res.locals.data = intensity;
           return next();
         })
     })
