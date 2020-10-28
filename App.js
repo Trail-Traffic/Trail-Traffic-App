@@ -22,7 +22,7 @@ function MapPage() {
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    fetch("http://192.168.1.3:5001/api/getData")
+    fetch("http://192.168.0.197:5001/api/getData")
       .then((res) => res.json())
       .then((res) => setTrails([res]))
       .catch((err) => console.log(err));
