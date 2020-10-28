@@ -1,8 +1,9 @@
-import { StatusBar } from "expo-status-bar";
-import MapView from "react-native-maps";
-import Heatmap, { PROVIDER_GOOGLE } from "react-native-maps";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+// import { StatusBar } from "expo-status-bar";
+import MapView, { PROVIDER_GOOGLE, Heatmap } from "react-native-maps";
+import { StyleSheet, Text, View, Button } from "react-native";
+import { NavigationContainer, StackActions } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
 const HEATMAPOINTS = [
   { latitude: 49.986111, longitude: 20.061667, weight: 1 },
@@ -15,54 +16,64 @@ const HEATMAPOINTS = [
   { latitude: 49.833333, longitude: 19.940556, weight: 66 },
 ];
 
-export default function App() {
+function MapPage() {
   return (
-    // <View style={styles.container}>
-    //   <Text>Hello!</Text>
-    //   <StatusBar style="auto" />
-    // </View>
     <View style={styles.container}>
       <MapView
-        style={{ flex: 1 }}
-        provider={PROVIDER_GOOGLE}
-        showsUserLocation
         initialRegion={{
           latitude: 50.06143,
           longitude: 19.93658,
           latitudeDelta: 0.09,
           longitudeDelta: 0.0121,
         }}
+        provider={PROVIDER_GOOGLE}
+        style={{ flex: 1 }}
       >
         <Heatmap
           points={HEATMAPOINTS}
+          radius={50}
           gradient={{
-            colors: ["#79BC6A", "#BBCF4C", "#EEC20B", "#F29305", "#E50000"],
-            startPoints: [0, 0.25, 0.5, 0.75, 1],
-            colorMapSize: 500,
+            colors: ["#0DE5FF", "#0D14FF", "#980DFF", "#FF0DED", "#E50000"],
+            startPoints: [0.01, 0.25, 0.5, 0.75, 1],
+            colorMapSize: 256,
           }}
-        ></Heatmap>
+        />
       </MapView>
+    </View>
+  )
+}
+
+function Splash({ navigation }) {
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text>Splash page</Text>
+      <Button
+        title="Go to Map"
+        onPress={() => navigation.navigate('MapPage')}
+      />
     </View>
   );
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-// });
+const Stack = createStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Splash">
+        <Stack.Screen name="Splash" component={Splash} />
+        <Stack.Screen name="MapPage" component={MapPage} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
     flex: 1,
-    backgroundColor: "pink",
-    justifyContent: "center",
+    backgroundColor: "red",
   },
   map: {
-    ...StyleSheet.absoluteFillObject,
+    flex: 1,
   },
 });
