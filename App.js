@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 // import { StatusBar } from "expo-status-bar";
 import MapView, { PROVIDER_GOOGLE, Heatmap } from "react-native-maps";
 import { StyleSheet, Text, View, Button, Image } from "react-native";
@@ -16,7 +16,16 @@ const HEATMAPOINTS = [
   { latitude: 49.833333, longitude: 19.940556, weight: 66 },
 ];
 
+const fetchData = [];
+
 function MapPage() {
+  useEffect(() => {
+    fetch("http://192.168.1.3:5001/api/getData")
+      .then((res) => res.json())
+      .then((res) => console.log("data", res))
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <View style={styles.container}>
       <MapView
