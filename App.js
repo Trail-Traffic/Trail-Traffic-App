@@ -10,6 +10,7 @@ import {
   Alert,
   Modal,
   TouchableHighlight,
+  TouchableOpacity,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 // import { createStackNavigator } from "@react-navigation/stack";
@@ -67,10 +68,16 @@ function Splash({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Image source={require("./assets/logo.png")} />
-      {/* <Text>Splash page</Text> */}
       <Icon.Button name="facebook" backgroundColor="#3b5998">
         Login with Facebook
       </Icon.Button>
+      <TouchableOpacity>
+        <View style={styles.googleButton}>
+          <Image></Image>
+          <Text>Sign in with Google</Text>
+        </View>
+      </TouchableOpacity>
+      {/* <Button title="Login with Google" style={styles.googleButton}></Button> */}
     </View>
   );
 }
@@ -129,5 +136,15 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+  },
+  googleButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderWidth: 0.5,
+    borderColor: "#fff",
+    height: 40,
+    borderRadius: 5,
+    margin: 5,
   },
 });
