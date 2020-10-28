@@ -11,12 +11,21 @@ import {
   Modal,
   TouchableHighlight,
   TouchableOpacity,
+  ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 // import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/FontAwesome";
+// import {
+//   GoogleSignin,
+//   GoogleSigninButton,
+//   statusCodes,
+// } from "@react-native-community/google-signin";
+
+// GoogleSignin.configure();
 
 function MapPage() {
   const [trails, setTrails] = useState([]);
@@ -73,21 +82,48 @@ function Splash({ navigation }) {
       </Icon.Button>
       <TouchableOpacity>
         <View style={styles.googleButton}>
-          <Image></Image>
-          <Text>Sign in with Google</Text>
+          <Image source={require("./assets/google.png")}></Image>
+          <Text style={styles.googleText}>Sign in with Google</Text>
         </View>
       </TouchableOpacity>
-      {/* <Button title="Login with Google" style={styles.googleButton}></Button> */}
+      {/* <GoogleSigninButton
+        style={{ width: 192, height: 48 }}
+        size={GoogleSigninButton.Size.Wide}
+        color={GoogleSigninButton.Color.Dark}
+      /> */}
     </View>
   );
 }
 
 function Favorites({ navigation }) {
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Favorites go here!</Text>
-      <Button title="Back to Map" onPress={() => navigation.navigate("Map")} />
-    </View>
+    <SafeAreaView style={styles.faveContainer}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <Text>Favorites go here!</Text>
+          <Button
+            title="Back to Map"
+            onPress={() => navigation.navigate("Map")}
+          />
+        </View>
+        <View style={{ alignSelf: "center" }}>
+          <View style={styles.profileImage}>
+            <Image
+              source={require("./assets/cat.jpg")}
+              style={styles.image}
+              resizeMode="center"
+            ></Image>
+          </View>
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>
+            Grumpy Cat
+          </Text>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -134,6 +170,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "red",
   },
+  faveContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   map: {
     flex: 1,
   },
@@ -146,5 +186,35 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 5,
     margin: 5,
+  },
+  googleText: {
+    color: "#616161",
+    fontSize: 14,
+  },
+  titleBar: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 24,
+    marginHorizontal: 16,
+  },
+  profileImage: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    overflow: "hidden",
+  },
+  image: {
+    flex: 1,
+    height: undefined,
+    width: undefined,
+  },
+  infoContainer: {
+    alignSelf: "center",
+    alignItems: "center",
+    marginTop: 16,
+  },
+  text: {
+    fontFamily: "HelveticaNeue",
+    color: "#52575D",
   },
 });
