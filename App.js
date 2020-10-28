@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
 // import { StatusBar } from "expo-status-bar";
-import MapView, { PROVIDER_GOOGLE, Heatmap } from "react-native-maps";
-import { StyleSheet, Text, View, Button, Image } from "react-native";
+import MapView, { PROVIDER_GOOGLE, Heatmap, Marker } from "react-native-maps";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  Image,
+  Alert,
+  Modal,
+  TouchableHighlight,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 // import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -10,12 +19,12 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 function MapPage() {
   const [trails, setTrails] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     fetch("http://192.168.1.3:5001/api/getData")
       .then((res) => res.json())
       .then((res) => setTrails([res]))
-      .then(() => console.log("trails", trails))
       .catch((err) => console.log(err));
   }, []);
 
@@ -31,6 +40,15 @@ function MapPage() {
         provider={PROVIDER_GOOGLE}
         style={{ flex: 1 }}
       >
+        {trails.map((marker, i) => (
+          <Marker
+            key={i}
+            coordinate={{
+              latitude: marker.latitude,
+              longitude: marker.longitude,
+            }}
+          />
+        ))}
         <Heatmap
           points={trails}
           radius={50}
