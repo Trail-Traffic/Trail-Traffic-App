@@ -4,6 +4,8 @@ import MapView, { PROVIDER_GOOGLE, Heatmap } from "react-native-maps";
 import { StyleSheet, Text, View, Button, Image } from "react-native";
 import { NavigationContainer, StackActions } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const HEATMAPOINTS = [
   { latitude: 49.986111, longitude: 20.061667, weight: 1 },
@@ -62,15 +64,49 @@ function Splash({ navigation }) {
   );
 }
 
-const Stack = createStackNavigator();
+function Favorites({ navigation }) {
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text>Favorites go here!</Text>
+      <Button title="Back to Map" onPress={() => navigation.navigate("Map")} />
+    </View>
+  );
+}
+
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={Splash} />
-        <Stack.Screen name="Map" component={MapPage} />
-      </Stack.Navigator>
+      <Tab.Navigator>
+        <Tab.Screen name="Login" component={Splash} options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons
+                name="ios-home"
+                color={color}
+                size={size}
+              />
+            ),
+          }}/>
+        <Tab.Screen name="Map" component={MapPage} options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons
+                name="md-map"
+                color={color}
+                size={size}
+              />
+            ),
+          }}/>
+        <Tab.Screen name="Favorites" component={Favorites} options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons
+                name="ios-heart"
+                color={color}
+                size={size}
+              />
+            ),
+          }}/>
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
