@@ -2,10 +2,11 @@ import React, { useEffect } from "react";
 // import { StatusBar } from "expo-status-bar";
 import MapView, { PROVIDER_GOOGLE, Heatmap } from "react-native-maps";
 import { StyleSheet, Text, View, Button, Image } from "react-native";
-import { NavigationContainer, StackActions } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+// import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const HEATMAPOINTS = [
   { latitude: 49.986111, longitude: 20.061667, weight: 1 },
@@ -59,7 +60,11 @@ function Splash({ navigation }) {
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Image source={require("./assets/logo.png")} />
       {/* <Text>Splash page</Text> */}
-      <Button title="Go to Map" onPress={() => navigation.navigate("Map")} />
+      <Icon.Button
+    name="facebook"
+    backgroundColor="#3b5998">
+    Login with Facebook
+      </Icon.Button>
     </View>
   );
 }
