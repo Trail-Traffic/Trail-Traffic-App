@@ -24,7 +24,7 @@ function MapPage() {
   useEffect(() => {
     fetch("http://192.168.0.197:5001/api/getData")
       .then((res) => res.json())
-      .then((res) => setTrails([res]))
+      .then((res) => setTrails(res))
       .catch((err) => console.log(err));
   }, []);
 
