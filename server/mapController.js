@@ -34,32 +34,42 @@ const latlong = {
 };
 
 mapController.getHeat = (req, res, next) => {
-  //deconstruct request body to get desired location
-  // const { trail } = req.body;
-  const trail = "griffithPark";
-  //make fetch call to API
-  fetch(
-    `https://besttime.app/api/v1/forecasts/now?api_key_public=${publicKey}&venue_id=${locations[trail]}`
-  )
-    .then((data) => {
-      data.json().then((parsedData) => {
-        //the returned intensity variable rates traffic on a scale from -2 to 2, and 999 indicates the trail is closed
-        const weight =
-          conversion[parsedData.analysis.hour_analysis.intensity_nr];
+  //init an empty array to hold promises that resolve to heatMapObjs
+  const heatMapArray = [];
 
-        res.locals.data = {
-          latitude: latlong[trail].latitude,
-          longitude: latlong[trail].longitude,
-          weight,
-        };
-        // console.log(data);
-        return next();
-      });
+  //iterate through all locations
+  for (let trail in locations) {
+    //create a new promise for each location
+    const heatMapPromise = new Promise((resolve, reject) => {
+      //async operation: fetch request to API
+      fetch(`https://besttime.app/api/v1/forecasts/now?api_key_public=${publicKey}&venue_id=${locations[trail]}`)
+      .then((data) => {
+        data.json().then((parsedData) => {
+          console.log('data returned from API', parsedData)
+          const weight = conversion[parsedData.analysis.hour_analysis.intensity_nr];
+          const heatMapObj = {
+            latitude: latlong[trail].latitude,
+            longitude: latlong[trail].longitude,
+            weight,
+          };
+          //when promise resolves, heatMapObj is returned
+          resolve(heatMapObj);
+        });
+      })
+      .catch((err) => {
+        return next(err);
+      })
     })
-    .catch((err) => {
-      console.log("error", err);
-      return next(err);
-    });
+    //push promises into array
+    heatMapArray.push(heatMapPromise)
+  }
+  
+  //this waits for all promises to resolve to heatMapObjs
+  Promise.all(heatMapArray)
+    //then that array is saved to res.locals
+    .then((array) => res.locals.data = array)
+    .then((array) => next())
+
 };
 
 module.exports = mapController;
