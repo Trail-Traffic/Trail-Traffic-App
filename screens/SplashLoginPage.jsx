@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+// import { StyleSheet, Text, View } from "react-native";
+=======
 // import React from "react";
 // import { View, Text } from 'react-native';
 
@@ -8,3 +11,4 @@
 //     </View>
 //     );
 // }
+>>>>>>> main
