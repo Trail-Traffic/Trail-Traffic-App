@@ -19,6 +19,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { MapPage } from "./screens/MapPage.jsx";
 import { Splash } from "./screens/SplashLoginPage.jsx";
+import secret from "./secrets"
 
 // import {
 //   GoogleSignin,
@@ -41,7 +42,7 @@ function Favorites({ navigation }) {
   });
 
   useEffect(() => {
-    fetch("http://192.168.0.197:5001/api/getData")
+    fetch(`http://${secret.ip_address}:5001/api/getData`)
       .then((res) => res.json())
       .then((res) => setTrails(res.trailNames))
       .catch((err) => console.log(err));
