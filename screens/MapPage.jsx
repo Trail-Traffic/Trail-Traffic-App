@@ -10,18 +10,21 @@ import {
   Text,
   View,
   Button,
-  Image,
-  Alert,
+  Switch,
   Modal,
   TouchableHighlight,
   TouchableOpacity,
 } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
+// import {useTheme} from '@react-navigation/native'
 
 export function MapPage() {
+  const [dark, setDark] = useState(false);
+  const toggleSwitch = () => setDark((prevState) => !prevState);
   const [trails, setTrails] = useState([]);
 
   useEffect(() => {
-    fetch("http://192.168.0.197:5001/api/getData")
+    fetch("http://192.168.1.3:5001/api/getData")
       .then((res) => res.json())
       .then((res) => setTrails(res))
       .catch((err) => console.log(err));
@@ -38,7 +41,24 @@ export function MapPage() {
         }}
         provider={PROVIDER_GOOGLE}
         style={{ flex: 1 }}
+        customMapStyle={dark ? mapDarkMode : []}
       >
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            paddingTop: 20,
+          }}
+        >
+          <Switch
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            thumbColor={dark ? "#f5dd4b" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={dark}
+          />
+        </View>
+
         {trails.map((marker, i) => (
           <Marker
             key={i}
@@ -50,7 +70,13 @@ export function MapPage() {
             <Callout tooltip>
               <View>
                 <View style={styles.bubble}>
-                  <Text style={styles.name}>Test Hello</Text>
+                  <Text style={styles.name}>
+                    Trail Name{" "}
+                    <Ionicons
+                      name="ios-heart-empty"
+                      style={{ fontSize: 20, alignItems: "flex-end" }}
+                    />
+                  </Text>
                 </View>
                 <View style={styles.arrowBorder} />
                 <View style={styles.arrow} />
