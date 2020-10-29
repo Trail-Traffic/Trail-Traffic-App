@@ -84,8 +84,7 @@ function Splash({ navigation }) {
       </Icon.Button>
       <TouchableOpacity>
         <View style={styles.googleButton}>
-          <Image source={require("./assets/google.png")}></Image>
-          <Text style={styles.googleText}>Sign in with Google</Text>
+          <Image source={require("./assets/google2.png")}></Image>
         </View>
       </TouchableOpacity>
       {/* <GoogleSigninButton
