@@ -20,7 +20,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 export function MapPage() {
   const [dark, setDark] = useState(false);
-  const toggleSwitch = () => setDark(prevState => !prevState)
+  const toggleSwitch = () => setDark((prevState) => !prevState);
   const [trails, setTrails] = useState([]);
 
   useEffect(() => {
@@ -41,18 +41,24 @@ export function MapPage() {
         }}
         provider={PROVIDER_GOOGLE}
         style={{ flex: 1 }}
-        customMapStyle={dark ? mapDarkMode : [] }
+        customMapStyle={dark ? mapDarkMode : []}
       >
-        <View style={{alignItems: 'center', justifyContent: 'center', paddingTop: 20}}>
-      <Switch 
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={dark ? "#f5dd4b" : "#f4f3f4"}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch}
-          value={dark}
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            paddingTop: 20,
+          }}
+        >
+          <Switch
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            thumbColor={dark ? "#f5dd4b" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={dark}
           />
         </View>
-          
+
         {trails.map((marker, i) => (
           <Marker
             key={i}
@@ -64,7 +70,13 @@ export function MapPage() {
             <Callout tooltip>
               <View>
                 <View style={styles.bubble}>
-                  <Text style={styles.name}>Trail Name <Ionicons name="ios-heart-empty" style={{fontSize: 20, alignItems: "flex-end",}} /></Text>
+                  <Text style={styles.name}>
+                    Trail Name{" "}
+                    <Ionicons
+                      name="ios-heart-empty"
+                      style={{ fontSize: 20, alignItems: "flex-end" }}
+                    />
+                  </Text>
                 </View>
                 <View style={styles.arrowBorder} />
                 <View style={styles.arrow} />
