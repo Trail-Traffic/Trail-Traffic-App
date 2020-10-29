@@ -25,11 +25,7 @@ export function MapPage({ route }) {
   const [trails, setTrails] = useState([]);
   const [heatMapStats, setHeatMapStats] = useState([]);
 
-<<<<<<< HEAD
   const [like, setLike] = useState(false);
-=======
-  // const { userInfo } = route.params;
->>>>>>> main
 
   useEffect(() => {
     fetch(`http://${secret.ip_address}:5001/api/getData`)
