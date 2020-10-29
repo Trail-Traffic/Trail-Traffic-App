@@ -3,20 +3,27 @@ const db = require('../models.js');
 const userController = {};
 
 // ***** Add user ***** //
-userController.addUser = async (req, res, next) => {
-  try {
-    const queryText = 'INSERT INTO users (id, email, name, photourl) VALUES ($1, $2, $3, $4) RETURNING *;';
-    const { id, email, name, photourl } = req.body;
-    const values = [id, email, name, photourl];
-    
-    await db.query(queryText, values,
-      (err, response) => {
+userController.addUser = (req, res, next) => {
+  const checkQuery = 'SELECT * FROM users WHERE id=$1'
+  const insertQuery = 'INSERT INTO users (id, email, name, photourl) VALUES ($1, $2, $3, $4) RETURNING *;';
+  const { id, email, name, photourl } = req.body;
+  const checkValues = [id]
+  const insertValues = [id, email, name, photourl];
+  
+  db.query(checkQuery, checkValues)
+    .then((response) => {
+      if (response.rows.length === 0) {
+        db.query(insertQuery, insertValues)
+          .then(response => {
+            res.locals.data = response.rows[0];
+            return next();
+          })
+      }
+      else {
         res.locals.data = response.rows[0];
         return next();
-      })
-  } catch(err) {
-    return next(err);
-  }
+      }
+    })
 }
 
 // ***** Get favorites, returns array of favorite names ***** //
