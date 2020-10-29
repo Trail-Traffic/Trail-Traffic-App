@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import MapView, { PROVIDER_GOOGLE, Heatmap, Marker, Callout } from "react-native-maps";
+import MapView, {
+  PROVIDER_GOOGLE,
+  Heatmap,
+  Marker,
+  Callout,
+} from "react-native-maps";
 import {
   StyleSheet,
   Text,
@@ -18,8 +23,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/FontAwesome";
-import {MapPage} from './screens/MapPage.jsx'
-import {Splash} from './screens/SplashLoginPage.jsx'
+import { MapPage } from "./screens/MapPage.jsx";
+import { Splash } from "./screens/SplashLoginPage.jsx";
 
 // import {
 //   GoogleSignin,
@@ -33,6 +38,15 @@ import {Splash} from './screens/SplashLoginPage.jsx'
 
 function Favorites({ navigation }) {
   const [trails, setTrails] = useState([]);
+  const [like, setDislike] = useState(true);
+
+  useEffect(() => {
+    fetch("http://192.168.1.3:5001/api/getData")
+      .then((res) => res.json())
+      .then((res) => setTrails(res))
+      .then(() => console.log(trails))
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <SafeAreaView style={styles.faveContainer}>
@@ -69,12 +83,20 @@ function Favorites({ navigation }) {
         <View style={styles.faveTitle}>
           <Text style={[styles.text, { fontSize: 24 }]}>Favorite Trails</Text>
         </View>
-        <Card style={styles.cardContainer}>
-          <Ionicons name="ios-heart" style={styles.heartIcon} />
-          {trails.map((trail, i) => {
-            return <ListItem key={i} title={trail.longitude} />;
-          })}
-        </Card>
+        {trails.map((trail, i) => {
+          return (
+            <Card>
+              <ListItem key={i}>
+                <Text style={styles.trailListText}>{trail.longitude}</Text>
+                <Ionicons
+                  name="ios-heart"
+                  style={like ? styles.heartIconRed : styles.heartIconGray}
+                  onPress={() => setDislike(!like)}
+                />
+              </ListItem>
+            </Card>
+          );
+        })}
       </ScrollView>
     </SafeAreaView>
   );
@@ -193,9 +215,18 @@ const styles = StyleSheet.create({
   cardContainer: {
     display: "flex",
   },
-  heartIcon: {
+  heartIconRed: {
     color: "red",
     fontSize: 25,
     alignItems: "flex-end",
+  },
+  heartIconGray: {
+    color: "#DCDCDC",
+    fontSize: 25,
+    alignItems: "flex-end",
+  },
+  trailListText: {
+    fontSize: 20,
+    textAlign: "center",
   },
 });
