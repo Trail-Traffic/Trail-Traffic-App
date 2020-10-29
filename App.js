@@ -41,7 +41,7 @@ function Favorites({ navigation }) {
   const [like, setDislike] = useState(true);
 
   useEffect(() => {
-    fetch("http://192.168.1.3:5001/api/getData")
+    fetch("http://192.168.0.197:5001/api/getData")
       .then((res) => res.json())
       .then((res) => setTrails(res))
       .then(() => console.log(trails))
