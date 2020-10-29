@@ -48,9 +48,10 @@ export function Splash({ navigation }) {
         fetch(`http://${secret.ip_address}:5001/api/addUser`, postObj)
           .then((res) => res.json())
           .then((userInfo) => {
-            //reroute to map view
-            console.log('frontend ', userInfo);
-            navigation.navigate("Map");
+            //reroute to map view with userInfo passed into params
+            navigation.navigate("Favorites", {
+              userInfo
+            });
           })
         //return result.accessToken;
       } else {
