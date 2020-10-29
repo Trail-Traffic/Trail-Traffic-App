@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import { StatusBar } from "expo-status-bar";
 import MapView, { PROVIDER_GOOGLE, Heatmap, Marker } from "react-native-maps";
 import {
   StyleSheet,
@@ -14,8 +13,8 @@ import {
   ScrollView,
   SafeAreaView,
 } from "react-native";
+import { Card, ListItem } from "react-native-elements";
 import { NavigationContainer } from "@react-navigation/native";
-// import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -27,6 +26,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 // GoogleSignin.configure();
 
+//========================================= MAP PAGE ================================================//
 function MapPage() {
   const [trails, setTrails] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -73,6 +73,8 @@ function MapPage() {
   );
 }
 
+//========================================= SPLASH/LOGIN PAGE ================================================//
+
 function Splash({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -95,18 +97,20 @@ function Splash({ navigation }) {
   );
 }
 
+//========================================= FAVORITES PAGE ================================================//
+
 function Favorites({ navigation }) {
+  const [trails, setTrails] = useState([]);
+
   return (
     <SafeAreaView style={styles.faveContainer}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        >
-          <Text>Favorites go here!</Text>
+        <View style={styles.titleBar}>
           <Button
             title="Back to Map"
             onPress={() => navigation.navigate("Map")}
           />
+          <Button title="Logout" onPress={() => navigation.navigate("Login")} />
         </View>
         <View style={{ alignSelf: "center" }}>
           <View style={styles.profileImage}>
@@ -116,16 +120,35 @@ function Favorites({ navigation }) {
               resizeMode="center"
             ></Image>
           </View>
+          <View style={styles.add}>
+            <Ionicons
+              name="ios-add"
+              size={48}
+              color="#DFD8C8"
+              style={{ marginTop: 6, marginLeft: 2 }}
+            ></Ionicons>
+          </View>
         </View>
         <View style={styles.infoContainer}>
           <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>
             Grumpy Cat
           </Text>
         </View>
+        <View style={styles.faveTitle}>
+          <Text style={[styles.text, { fontSize: 24 }]}>Favorite Trails</Text>
+        </View>
+        <Card style={styles.cardContainer}>
+          <Ionicons name="ios-heart" style={styles.heartIcon} />
+          {trails.map((trail, i) => {
+            return <ListItem key={i} title={trail.longitude} />;
+          })}
+        </Card>
       </ScrollView>
     </SafeAreaView>
   );
 }
+
+//========================================= MAIN APP COMPONENT ================================================//
 
 const Tab = createBottomTabNavigator();
 
@@ -164,6 +187,8 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+//========================================= STYLING ================================================//
 
 const styles = StyleSheet.create({
   container: {
@@ -216,5 +241,29 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: "HelveticaNeue",
     color: "#52575D",
+  },
+  faveTitle: {
+    flexDirection: "row",
+    alignSelf: "center",
+    marginTop: 45,
+  },
+  add: {
+    backgroundColor: "#41444B",
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    width: 55,
+    height: 55,
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cardContainer: {
+    display: "flex",
+  },
+  heartIcon: {
+    color: "red",
+    fontSize: 25,
+    alignItems: "flex-end",
   },
 });
