@@ -34,32 +34,30 @@ const latlong = {
 };
 
 mapController.getHeat = (req, res, next) => {
-  //init an empty array to hold promises that resolve to heatMapObjs
-
-  // change to an object with two keys
-  //   {
-  //     heatMapArray = [];
-  //     trailNames = []
-  //   }
-  const heatMapArray = [];
+  //init an empty array to hold promises that resolve to trailDataObjs
+  const trailDataArray = [];
 
   //iterate through all locations
   for (let trail in locations) {
     //create a new promise for each location
-    const heatMapPromise = new Promise((resolve, reject) => {
+    const trailDataPromise = new Promise((resolve, reject) => {
       //async operation: fetch request to API
       fetch(`https://besttime.app/api/v1/forecasts/now?api_key_public=${publicKey}&venue_id=${locations[trail]}`)
       .then((data) => {
         data.json().then((parsedData) => {
-          console.log('data returned from API', parsedData)
+          // console.log('data returned from API', parsedData)
+          const trailName = parsedData.venue_info.venue_name;
           const weight = conversion[parsedData.analysis.hour_analysis.intensity_nr];
-          const heatMapObj = {
-            latitude: latlong[trail].latitude,
-            longitude: latlong[trail].longitude,
-            weight,
+          const trailData = {
+            trailName,
+            heatMap: {
+              latitude: latlong[trail].latitude,
+              longitude: latlong[trail].longitude,
+              weight,
+            }
           };
-          //when promise resolves, heatMapObj is returned
-          resolve(heatMapObj);
+          //when promise resolves, trailDataObj is returned
+          resolve(trailData);
         });
       })
       .catch((err) => {
@@ -67,16 +65,23 @@ mapController.getHeat = (req, res, next) => {
       })
     })
     //push promises into array
-    heatMapArray.push(heatMapPromise)
+    trailDataArray.push(trailDataPromise)
   }
   
-  //this waits for all promises to resolve to heatMapObjs
-  Promise.all(heatMapArray)
+  //this waits for all promises to resolve to trailDataObjs
+  Promise.all(trailDataArray)
     //then that array is saved into an object with all location names
-    .then((heatMapArray) => {
+    .then((trailDataArray) => {
+      const heatMapStats = [];
+      const trailNames = [];
+      trailDataArray.forEach(dataObj => {
+        console.log(dataObj);
+        heatMapStats.push(dataObj.heatMap);
+        trailNames.push(dataObj.trailName);
+      })
       const mapInfo = { 
-        heatMapArray, 
-        trailNames: ["Switzer Falls", "Griffith Park", "Elysian Park", "Eaton Canyon", "Runyon Canyon"]
+        heatMapStats, 
+        trailNames
       }
       res.locals.data = mapInfo;
     })
