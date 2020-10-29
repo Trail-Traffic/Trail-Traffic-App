@@ -1,79 +1,232 @@
-import React from "react";
-// import { StatusBar } from "expo-status-bar";
-import MapView, { PROVIDER_GOOGLE, Heatmap } from "react-native-maps";
-import { StyleSheet, Text, View, Button } from "react-native";
-import { NavigationContainer, StackActions } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import React, { useEffect, useState } from "react";
+import MapView, {
+  PROVIDER_GOOGLE,
+  Heatmap,
+  Marker,
+  Callout,
+} from "react-native-maps";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  Image,
+  Alert,
+  Modal,
+  TouchableHighlight,
+  TouchableOpacity,
+  ScrollView,
+  SafeAreaView,
+} from "react-native";
+import { Card, ListItem } from "react-native-elements";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { MapPage } from "./screens/MapPage.jsx";
+import { Splash } from "./screens/SplashLoginPage.jsx";
 
-const HEATMAPOINTS = [
-  { latitude: 49.986111, longitude: 20.061667, weight: 1 },
-  { latitude: 50.193139, longitude: 20.288717, weight: 2 },
-  { latitude: 49.740278, longitude: 19.588611, weight: 1 },
-  { latitude: 50.061389, longitude: 19.938333, weight: 8 },
-  { latitude: 50.174722, longitude: 20.986389, weight: 11 },
-  { latitude: 50.064507, longitude: 19.920777, weight: 98 },
-  { latitude: 49.3, longitude: 19.95, weight: 41 },
-  { latitude: 49.833333, longitude: 19.940556, weight: 66 },
-];
+// import {
+//   GoogleSignin,
+//   GoogleSigninButton,
+//   statusCodes,
+// } from "@react-native-community/google-signin";
 
-function MapPage() {
+// GoogleSignin.configure();
+
+//========================================= FAVORITES PAGE ================================================//
+
+function Favorites({ navigation }) {
+  const [trails, setTrails] = useState([]);
+  const [like, setDislike] = useState(true);
+
+  useEffect(() => {
+    fetch("http://192.168.1.3:5001/api/getData")
+      .then((res) => res.json())
+      .then((res) => setTrails(res))
+      .then(() => console.log(trails))
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <MapView
-        initialRegion={{
-          latitude: 50.06143,
-          longitude: 19.93658,
-          latitudeDelta: 0.09,
-          longitudeDelta: 0.0121,
-        }}
-        provider={PROVIDER_GOOGLE}
-        style={{ flex: 1 }}
-      >
-        <Heatmap
-          points={HEATMAPOINTS}
-          radius={50}
-          gradient={{
-            colors: ["#0DE5FF", "#0D14FF", "#980DFF", "#FF0DED", "#E50000"],
-            startPoints: [0.01, 0.25, 0.5, 0.75, 1],
-            colorMapSize: 256,
-          }}
-        />
-      </MapView>
-    </View>
-  )
-}
-
-function Splash({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Splash page</Text>
-      <Button
-        title="Go to Map"
-        onPress={() => navigation.navigate('MapPage')}
-      />
-    </View>
+    <SafeAreaView style={styles.faveContainer}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.titleBar}>
+          <Button
+            title="Back to Map"
+            onPress={() => navigation.navigate("Map")}
+          />
+          <Button title="Logout" onPress={() => navigation.navigate("Login")} />
+        </View>
+        <View style={{ alignSelf: "center" }}>
+          <View style={styles.profileImage}>
+            <Image
+              source={require("./assets/cat.jpg")}
+              style={styles.image}
+              resizeMode="center"
+            ></Image>
+          </View>
+          <View style={styles.add}>
+            <Ionicons
+              name="ios-add"
+              size={48}
+              color="#DFD8C8"
+              style={{ marginTop: 6, marginLeft: 2 }}
+            ></Ionicons>
+          </View>
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>
+            Grumpy Cat
+          </Text>
+        </View>
+        <View style={styles.faveTitle}>
+          <Text style={[styles.text, { fontSize: 24 }]}>Favorite Trails</Text>
+        </View>
+        {trails.map((trail, i) => {
+          return (
+            <Card key={i}>
+              <ListItem>
+                <Text style={styles.trailListText}>{trail.longitude}</Text>
+                <Ionicons
+                  name="ios-heart"
+                  style={like ? styles.heartIconRed : styles.heartIconGray}
+                  onPress={() => setDislike(!like)}
+                />
+              </ListItem>
+            </Card>
+          );
+        })}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
-const Stack = createStackNavigator();
+//========================================= MAIN APP COMPONENT ================================================//
+
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Splash">
-        <Stack.Screen name="Splash" component={Splash} />
-        <Stack.Screen name="MapPage" component={MapPage} />
-      </Stack.Navigator>
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Login"
+          component={Splash}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="ios-home" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Map"
+          component={MapPage}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="md-map" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Favorites"
+          component={Favorites}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="ios-heart" color={color} size={size} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
+
+//========================================= STYLING ================================================//
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "red",
   },
+  faveContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   map: {
     flex: 1,
+  },
+  googleButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderWidth: 0.5,
+    borderColor: "#fff",
+    height: 40,
+    borderRadius: 5,
+    margin: 5,
+  },
+  googleText: {
+    color: "#616161",
+    fontSize: 14,
+  },
+  titleBar: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 24,
+    marginHorizontal: 16,
+  },
+  profileImage: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    overflow: "hidden",
+  },
+  image: {
+    flex: 1,
+    height: undefined,
+    width: undefined,
+  },
+  infoContainer: {
+    alignSelf: "center",
+    alignItems: "center",
+    marginTop: 16,
+  },
+  text: {
+    fontFamily: "HelveticaNeue",
+    color: "#52575D",
+  },
+  faveTitle: {
+    flexDirection: "row",
+    alignSelf: "center",
+    marginTop: 45,
+  },
+  add: {
+    backgroundColor: "#41444B",
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    width: 55,
+    height: 55,
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cardContainer: {
+    display: "flex",
+  },
+  heartIconRed: {
+    color: "red",
+    fontSize: 25,
+    alignItems: "flex-end",
+  },
+  heartIconGray: {
+    color: "#DCDCDC",
+    fontSize: 25,
+    alignItems: "flex-end",
+  },
+  trailListText: {
+    fontSize: 20,
+    textAlign: "center",
   },
 });
