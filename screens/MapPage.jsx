@@ -25,7 +25,7 @@ export function MapPage({ route }) {
   const [trails, setTrails] = useState([]);
   const [heatMapStats, setHeatMapStats] = useState([]);
 
-  const { userInfo } = route.params;
+  // const { userInfo } = route.params;
 
   useEffect(() => {
     fetch(`http://${secret.ip_address}:5001/api/getData`)
