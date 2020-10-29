@@ -44,7 +44,6 @@ function Favorites({ navigation }) {
     fetch("http://192.168.1.3:5001/api/getData")
       .then((res) => res.json())
       .then((res) => setTrails(res))
-      .then(() => console.log(trails))
       .catch((err) => console.log(err));
   }, []);
 
