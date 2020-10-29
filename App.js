@@ -19,6 +19,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/FontAwesome";
 import {MapPage} from './screens/MapPage.jsx'
+import {Splash} from './screens/SplashLoginPage.jsx'
 
 // import {
 //   GoogleSignin,
@@ -27,29 +28,6 @@ import {MapPage} from './screens/MapPage.jsx'
 // } from "@react-native-community/google-signin";
 
 // GoogleSignin.configure();
-
-//========================================= SPLASH/LOGIN PAGE ================================================//
-
-function Splash({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Image source={require("./assets/logo.png")} />
-      <Icon.Button name="facebook" backgroundColor="#3b5998">
-        Login with Facebook
-      </Icon.Button>
-      <TouchableOpacity>
-        <View style={styles.googleButton}>
-          <Image source={require("./assets/google2.png")}></Image>
-        </View>
-      </TouchableOpacity>
-      {/* <GoogleSigninButton
-        style={{ width: 192, height: 48 }}
-        size={GoogleSigninButton.Size.Wide}
-        color={GoogleSigninButton.Color.Dark}
-      /> */}
-    </View>
-  );
-}
 
 //========================================= FAVORITES PAGE ================================================//
 
