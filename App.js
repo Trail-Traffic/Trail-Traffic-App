@@ -19,7 +19,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { MapPage } from "./screens/MapPage.jsx";
 import { Splash } from "./screens/SplashLoginPage.jsx";
-import secret from "./secrets"
+import secret from "./secrets";
 
 // import {
 //   GoogleSignin,
@@ -36,8 +36,10 @@ function Favorites({ navigation, route }) {
   const [faves, setFaves] = useState([]);
 
   useEffect(() => {
-    console.log('in fave useEffect');
-    fetch(`http://${secret.ip_address}:5001/api/getFaves?user_id=${userInfo.id}`)
+    console.log("in fave useEffect");
+    fetch(
+      `http://${secret.ip_address}:5001/api/getFaves?user_id=${userInfo.id}`
+    )
       .then((res) => res.json())
       .then((parsedRes) => setFaves(parsedRes))
       .catch((err) => console.log(err));
@@ -56,9 +58,8 @@ function Favorites({ navigation, route }) {
         <View style={{ alignSelf: "center" }}>
           <View style={styles.profileImage}>
             <Image
-              source={{uri: userInfo.photourl}}
+              source={{ uri: userInfo.photourl }}
               style={styles.image}
-              resizeMode="center"
             ></Image>
           </View>
           <View style={styles.add}>
@@ -104,7 +105,7 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
+      <Tab.Navigator styles={{backgroundColor: "red"}}>
         <Tab.Screen
           name="Login"
           component={Splash}

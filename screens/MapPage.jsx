@@ -26,6 +26,7 @@ export function MapPage({ route }) {
   const [heatMapStats, setHeatMapStats] = useState([]);
 
   const [like, setLike] = useState(false);
+  const heartChange = () => setLike((prev) => !prev);
 
   useEffect(() => {
     fetch(`http://${secret.ip_address}:5001/api/getData`)
@@ -83,7 +84,7 @@ export function MapPage({ route }) {
                     <Ionicons
                       name="ios-heart"
                       style={like ? styles.heartIconRed : styles.heartIconGray}
-                      onPress={() => setLike(!like)}
+                      onPress={heartChange}
                     />
                   </View>
                   <View style={styles.arrowBorder} />

@@ -49,9 +49,9 @@ export function Splash({ navigation }) {
           .then((userInfo) => {
             //reroute to map view with userInfo passed into params
             navigation.navigate("Favorites", {
-              userInfo
+              userInfo,
             });
-          })
+          });
         //return result.accessToken;
       } else {
         return { cancelled: true };
@@ -63,7 +63,14 @@ export function Splash({ navigation }) {
   };
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "gray",
+      }}
+    >
       <Image source={require("../assets/logo.png")} />
       <TouchableOpacity>
         <TouchableWithoutFeedback onPress={signInWithGoogle}>
@@ -72,20 +79,25 @@ export function Splash({ navigation }) {
           </View>
         </TouchableWithoutFeedback>
       </TouchableOpacity>
+      {/* <GoogleSigninButton
+          style={{ width: 192, height: 48 }}
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Dark}
+        /> */}
     </View>
   );
-  }
+}
 
- cnst styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "red",
   },
-    veContainer: {
+  faveContainer: {
     flex: 1,
     backgroundColor: "#fff",
   },
-   mp: {
+  map: {
     flex: 1,
   },
   googleButton: {
@@ -95,8 +107,8 @@ export function Splash({ navigation }) {
     borderWidth: 0.5,
     borderColor: "#fff",
     height: 40,
+    width: 200,
     borderRadius: 5,
     margin: 5,
-  ;
   },
-})
+});
