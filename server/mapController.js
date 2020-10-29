@@ -35,6 +35,12 @@ const latlong = {
 
 mapController.getHeat = (req, res, next) => {
   //init an empty array to hold promises that resolve to heatMapObjs
+
+  // change to an object with two keys
+  //   {
+  //     heatMapArray = [];
+  //     trailNames = []
+  //   }
   const heatMapArray = [];
 
   //iterate through all locations
@@ -66,9 +72,15 @@ mapController.getHeat = (req, res, next) => {
   
   //this waits for all promises to resolve to heatMapObjs
   Promise.all(heatMapArray)
-    //then that array is saved to res.locals
-    .then((array) => res.locals.data = array)
-    .then((array) => next())
+    //then that array is saved into an object with all location names
+    .then((heatMapArray) => {
+      const mapInfo = { 
+        heatMapArray, 
+        trailNames: ["Switzer Falls", "Griffith Park", "Elysian Park", "Eaton Canyon", "Runyon Canyon"]
+      }
+      res.locals.data = mapInfo;
+    })
+    .then(() => next())
 
 };
 
