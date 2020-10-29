@@ -1,4 +1,3 @@
-const { query } = require("express");
 const db = require('../models.js');
 const userController = {};
 
@@ -28,13 +27,19 @@ userController.addUser = (req, res, next) => {
 
 // ***** Get favorites, returns array of favorite names ***** //
 userController.getFavorites = async (req, res, next) => {
+  console.log('in userController getFaves', req.query)
   try {
-    const queryText = 'SELECT name FROM trails WHERE id = (SELECT trail_id FROM faves WHERE user_id=$1);';
-    const { user_id } = req.body;
+    const queryText = 'SELECT trail_name FROM faves WHERE user_id=$1;';
+    const { user_id } = req.query;
     const values = [user_id];
     await db.query(queryText, values,
       (err, response) => {
-        res.locals.data = response.rows;
+        const faveArray = [];
+        response.rows.forEach(obj => {
+          faveArray.push(obj.trail_name);
+        })
+        res.locals.data = faveArray;
+        return next();
       })
   } catch(err) {
     return next(err);
@@ -44,9 +49,9 @@ userController.getFavorites = async (req, res, next) => {
 // ***** Add favorite ***** //
 userController.addFavorite = async (req, res, next) => {
   try {
-    const queryText = 'INSERT INTO faves (user_id, trail_id) VALUES ($1, $2) RETURNING *;';
-    const { user_id, trail_id } = req.body;
-    const values = [user_id, trail_id];
+    const queryText = 'INSERT INTO faves (user_id, trail_name) VALUES ($1, $2);';
+    const { user_id, trail_name } = req.body;
+    const values = [user_id, trail_name];
 
     await db.query(queryText, values,
       (err, response) => {
@@ -61,9 +66,9 @@ userController.addFavorite = async (req, res, next) => {
 // ***** Delete favorite ***** //
 userController.deleteFavorite = async (req, res, next) => {
   try{
-    const queryText = 'DELETE FROM faves WHERE user_id = $1 AND trail_id = $2 RETURNING user_id;';
-    const { user_id, trail_id } = req.body;
-    const values = [user_id, trail_id];
+    const queryText = 'DELETE FROM faves WHERE user_id = $1 AND trail_name = $2;';
+    const { user_id, trail_name } = req.body;
+    const values = [user_id, trail_name];
   
     await db.query(queryText, values,
       (err, response) => {

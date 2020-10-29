@@ -19,13 +19,17 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import secret from "../secrets";
 // import {useTheme} from '@react-navigation/native'
 
-export function MapPage() {
+export function MapPage({ route }) {
   const [dark, setDark] = useState(false);
   const toggleSwitch = () => setDark((prevState) => !prevState);
   const [trails, setTrails] = useState([]);
   const [heatMapStats, setHeatMapStats] = useState([]);
 
+<<<<<<< HEAD
   const [like, setLike] = useState(false);
+=======
+  // const { userInfo } = route.params;
+>>>>>>> main
 
   useEffect(() => {
     fetch(`http://${secret.ip_address}:5001/api/getData`)
