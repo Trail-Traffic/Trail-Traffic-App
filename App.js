@@ -1,10 +1,4 @@
 import React, { useEffect, useState } from "react";
-import MapView, {
-  PROVIDER_GOOGLE,
-  Heatmap,
-  Marker,
-  Callout,
-} from "react-native-maps";
 import {
   StyleSheet,
   Text,
@@ -38,13 +32,18 @@ import { Splash } from "./screens/SplashLoginPage.jsx";
 
 function Favorites({ navigation }) {
   const [trails, setTrails] = useState([]);
-  const [like, setDislike] = useState(true);
+  const [like, setDislike] = useState({
+    0: true,
+    1: true,
+    2: true,
+    3: true,
+    4: true,
+  });
 
   useEffect(() => {
     fetch("http://192.168.0.197:5001/api/getData")
       .then((res) => res.json())
       .then((res) => setTrails(res))
-      .then(() => console.log(trails))
       .catch((err) => console.log(err));
   }, []);
 

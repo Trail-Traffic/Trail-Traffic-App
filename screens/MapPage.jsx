@@ -22,11 +22,16 @@ export function MapPage() {
   const [dark, setDark] = useState(false);
   const toggleSwitch = () => setDark((prevState) => !prevState);
   const [trails, setTrails] = useState([]);
+  const [heatMapStats, setHeatMapStats] = useState([]);
 
   useEffect(() => {
     fetch("http://192.168.0.197:5001/api/getData")
       .then((res) => res.json())
-      .then((res) => setTrails(res))
+      .then((res) => {
+        setHeatMapStats(res.heatMapStats);
+        setTrails(res.trailNames);
+      })
+
       .catch((err) => console.log(err));
   }, []);
 
@@ -59,7 +64,7 @@ export function MapPage() {
           />
         </View>
 
-        {trails.map((marker, i) => (
+        {heatMapStats.map((marker, i) => (
           <Marker
             key={i}
             coordinate={{
@@ -71,7 +76,7 @@ export function MapPage() {
               <View>
                 <View style={styles.bubble}>
                   <Text style={styles.name}>
-                    Trail Name{" "}
+                    {trails[i]}
                     <Ionicons
                       name="ios-heart-empty"
                       style={{ fontSize: 20, alignItems: "flex-end" }}
@@ -85,7 +90,7 @@ export function MapPage() {
           </Marker>
         ))}
         <Heatmap
-          points={trails}
+          points={heatMapStats}
           radius={50}
           gradient={{
             colors: ["#0DE5FF", "#0D14FF", "#980DFF", "#FF0DED", "#E50000"],
