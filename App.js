@@ -36,7 +36,7 @@ function Favorites({ navigation, route }) {
   const [faves, setFaves] = useState([]);
 
   useEffect(() => {
-    console.log("in fave useEffect");
+    // console.log("in fave useEffect");
     fetch(
       `http://${secret.ip_address}:5001/api/getFaves?user_id=${userInfo.id}`
     )
@@ -105,7 +105,7 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator styles={{backgroundColor: "red"}}>
+      <Tab.Navigator>
         <Tab.Screen
           name="Login"
           component={Splash}

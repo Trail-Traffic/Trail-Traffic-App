@@ -68,7 +68,7 @@ export function Splash({ navigation }) {
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "gray",
+        backgroundColor: "white",
       }}
     >
       <Image source={require("../assets/logo.png")} />
