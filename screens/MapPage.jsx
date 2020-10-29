@@ -16,7 +16,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import secret from "../secrets"
+import secret from "../secrets";
 // import {useTheme} from '@react-navigation/native'
 
 export function MapPage() {
@@ -67,33 +67,32 @@ export function MapPage() {
           />
         </View>
 
-        {heatMapStats.map((marker, i) => (
-          <Marker
-            key={i}
-            coordinate={{
-              latitude: marker.latitude,
-              longitude: marker.longitude,
-            }}
-          >
-            <Callout tooltip>
-              <View>
-                <View style={styles.bubble}>
-                  <Text style={styles.name}>
-                    {trails[i]}
+        {heatMapStats.map((marker, i) => {
+          return (
+            <Marker
+              key={i}
+              coordinate={{
+                latitude: marker.latitude,
+                longitude: marker.longitude,
+              }}
+            >
+              <Callout tooltip>
+                <View>
+                  <View style={styles.bubble}>
+                    <Text style={styles.name}>{trails[i]}</Text>
                     <Ionicons
-                  key={i}
-                  name="ios-heart"
-                  style={like ? styles.heartIconRed : styles.heartIconGray}
-                  onPress={() => setDislike(!like)}
-                />
-                  </Text>
+                      name="ios-heart"
+                      style={like ? styles.heartIconRed : styles.heartIconGray}
+                      onPress={() => setLike(!like)}
+                    />
+                  </View>
+                  <View style={styles.arrowBorder} />
+                  <View style={styles.arrow} />
                 </View>
-                <View style={styles.arrowBorder} />
-                <View style={styles.arrow} />
-              </View>
-            </Callout>
-          </Marker>
-        ))}
+              </Callout>
+            </Marker>
+          );
+        })}
         <Heatmap
           points={heatMapStats}
           radius={50}
@@ -107,7 +106,6 @@ export function MapPage() {
     </View>
   );
 }
-
 
 // Map styles
 const styles = StyleSheet.create({
@@ -151,6 +149,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     marginBottom: 5,
+    alignItems: "center",
   },
   // Character image
   image: {
@@ -168,7 +167,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
 });
-
 
 // Map dark mode
 const mapDarkMode = [
