@@ -24,6 +24,8 @@ export function MapPage() {
   const [trails, setTrails] = useState([]);
   const [heatMapStats, setHeatMapStats] = useState([]);
 
+  const [like, setLike] = useState(false);
+
   useEffect(() => {
     fetch("http://192.168.0.197:5001/api/getData")
       .then((res) => res.json())
@@ -78,9 +80,11 @@ export function MapPage() {
                   <Text style={styles.name}>
                     {trails[i]}
                     <Ionicons
-                      name="ios-heart-empty"
-                      style={{ fontSize: 20, alignItems: "flex-end" }}
-                    />
+                  key={i}
+                  name="ios-heart"
+                  style={like ? styles.heartIconRed : styles.heartIconGray}
+                  onPress={() => setDislike(!like)}
+                />
                   </Text>
                 </View>
                 <View style={styles.arrowBorder} />
@@ -103,6 +107,8 @@ export function MapPage() {
   );
 }
 
+
+// Map styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -150,8 +156,20 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 80,
   },
+  heartIconRed: {
+    color: "red",
+    fontSize: 25,
+    alignItems: "flex-end",
+  },
+  heartIconGray: {
+    color: "#DCDCDC",
+    fontSize: 25,
+    alignItems: "flex-end",
+  },
 });
 
+
+// Map dark mode
 const mapDarkMode = [
   {
     elementType: "geometry",
