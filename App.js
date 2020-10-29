@@ -43,7 +43,7 @@ function Favorites({ navigation }) {
   useEffect(() => {
     fetch("http://192.168.1.3:5001/api/getData")
       .then((res) => res.json())
-      .then((res) => setTrails(res))
+      .then((res) => setTrails(res.trailNames))
       .catch((err) => console.log(err));
   }, []);
 
@@ -86,7 +86,7 @@ function Favorites({ navigation }) {
           return (
             <Card key={i}>
               <ListItem>
-                <Text style={styles.trailListText}>{trail.longitude}</Text>
+                <Text style={styles.trailListText}>{trail}</Text>
                 <Ionicons
                   name="ios-heart"
                   style={like ? styles.heartIconRed : styles.heartIconGray}
