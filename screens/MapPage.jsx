@@ -16,6 +16,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import secret from "../secrets"
 // import {useTheme} from '@react-navigation/native'
 
 export function MapPage() {
@@ -25,7 +26,7 @@ export function MapPage() {
   const [heatMapStats, setHeatMapStats] = useState([]);
 
   useEffect(() => {
-    fetch("http://192.168.0.197:5001/api/getData")
+    fetch(`http://${secret.ip_address}:5001/api/getData`)
       .then((res) => res.json())
       .then((res) => {
         setHeatMapStats(res.heatMapStats);

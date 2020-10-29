@@ -15,6 +15,8 @@ import {
 } from "react-native";
 import * as Google from "expo-google-app-auth";
 import secret from "../secrets"
+import { MapPage }from "./MapPage.jsx"
+import App from "../App";
 
 const IOS_CLIENT_ID = secret.google_client_id;
 const FB_APP_ID = secret.facebook_app_id;
@@ -27,13 +29,30 @@ export function Splash({ navigation }) {
         iosClientId: IOS_CLIENT_ID,
         scopes: ["profile", "email"]
       });
-
+      //successful Google login
       if (result.type === "success") {
-        console.log("LoginScreen.js.js 21 | ", result.user.givenName);
-        this.props.navigation.navigate("Profile", {
-          username: result.user.givenName
-        });
-        return result.accessToken;
+        const user = result.user;
+        //insert user into database if user doesn't exist
+        const postObj = {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            id: user.id,
+            email: user.email,
+            name: user.givenName,
+            photourl: user.photoUrl
+          })
+        }
+        fetch(`http://${secret.ip_address}:5001/api/addUser`, postObj)
+          .then((res) => res.json())
+          .then((userInfo) => {
+            //reroute to map view
+            console.log('frontend ', userInfo);
+            navigation.navigate("Map");
+          })
+        //return result.accessToken;
       } else {
         return { cancelled: true };
       }

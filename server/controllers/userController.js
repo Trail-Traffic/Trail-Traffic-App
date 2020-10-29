@@ -5,13 +5,14 @@ const userController = {};
 // ***** Add user ***** //
 userController.addUser = async (req, res, next) => {
   try {
-    const queryText = 'INSERT INTO users (username) VALUES ($1) RETURNING *;';
-    const { username } = req.body;
-    const values = [username];
+    const queryText = 'INSERT INTO users (id, email, name, photourl) VALUES ($1, $2, $3, $4) RETURNING *;';
+    const { id, email, name, photourl } = req.body;
+    const values = [id, email, name, photourl];
     
     await db.query(queryText, values,
       (err, response) => {
         res.locals.data = response.rows[0];
+        return next();
       })
   } catch(err) {
     return next(err);

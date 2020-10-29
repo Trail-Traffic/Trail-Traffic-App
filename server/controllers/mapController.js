@@ -1,5 +1,5 @@
 const fetch = require("node-fetch");
-const secret = require("../secrets");
+const secret = require("../../secrets");
 
 const mapController = {};
 
