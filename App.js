@@ -88,6 +88,7 @@ function Favorites({ navigation }) {
               <ListItem>
                 <Text style={styles.trailListText}>{trail}</Text>
                 <Ionicons
+                  key={i}
                   name="ios-heart"
                   style={like ? styles.heartIconRed : styles.heartIconGray}
                   onPress={() => setDislike(!like)}
