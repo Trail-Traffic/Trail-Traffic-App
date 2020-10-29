@@ -85,8 +85,8 @@ function Favorites({ navigation }) {
         </View>
         {trails.map((trail, i) => {
           return (
-            <Card>
-              <ListItem key={i}>
+            <Card key={i}>
+              <ListItem>
                 <Text style={styles.trailListText}>{trail.longitude}</Text>
                 <Ionicons
                   name="ios-heart"
