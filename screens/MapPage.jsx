@@ -16,7 +16,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import secret from "../secrets"
+import secret from "../secrets";
 // import {useTheme} from '@react-navigation/native'
 
 export function MapPage({ route }) {
@@ -25,7 +25,8 @@ export function MapPage({ route }) {
   const [trails, setTrails] = useState([]);
   const [heatMapStats, setHeatMapStats] = useState([]);
 
-  // const { userInfo } = route.params;
+  const [like, setLike] = useState(false);
+  const heartChange = () => setLike((prev) => !prev);
 
   useEffect(() => {
     fetch(`http://${secret.ip_address}:5001/api/getData`)
@@ -67,31 +68,32 @@ export function MapPage({ route }) {
           />
         </View>
 
-        {heatMapStats.map((marker, i) => (
-          <Marker
-            key={i}
-            coordinate={{
-              latitude: marker.latitude,
-              longitude: marker.longitude,
-            }}
-          >
-            <Callout tooltip>
-              <View>
-                <View style={styles.bubble}>
-                  <Text style={styles.name}>
-                    {trails[i]}
+        {heatMapStats.map((marker, i) => {
+          return (
+            <Marker
+              key={i}
+              coordinate={{
+                latitude: marker.latitude,
+                longitude: marker.longitude,
+              }}
+            >
+              <Callout tooltip>
+                <View>
+                  <View style={styles.bubble}>
+                    <Text style={styles.name}>{trails[i]}</Text>
                     <Ionicons
-                      name="ios-heart-empty"
-                      style={{ fontSize: 20, alignItems: "flex-end" }}
+                      name="ios-heart"
+                      style={like ? styles.heartIconRed : styles.heartIconGray}
+                      onPress={heartChange}
                     />
-                  </Text>
+                  </View>
+                  <View style={styles.arrowBorder} />
+                  <View style={styles.arrow} />
                 </View>
-                <View style={styles.arrowBorder} />
-                <View style={styles.arrow} />
-              </View>
-            </Callout>
-          </Marker>
-        ))}
+              </Callout>
+            </Marker>
+          );
+        })}
         <Heatmap
           points={heatMapStats}
           radius={50}
@@ -106,6 +108,7 @@ export function MapPage({ route }) {
   );
 }
 
+// Map styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -147,14 +150,26 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     marginBottom: 5,
+    alignItems: "center",
   },
   // Character image
   image: {
     width: "100%",
     height: 80,
   },
+  heartIconRed: {
+    color: "red",
+    fontSize: 25,
+    alignItems: "flex-end",
+  },
+  heartIconGray: {
+    color: "#DCDCDC",
+    fontSize: 25,
+    alignItems: "flex-end",
+  },
 });
 
+// Map dark mode
 const mapDarkMode = [
   {
     elementType: "geometry",
