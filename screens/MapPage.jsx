@@ -16,17 +16,26 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import secret from "../secrets";
 // import {useTheme} from '@react-navigation/native'
 
-export function MapPage() {
+export function MapPage({ route }) {
   const [dark, setDark] = useState(false);
   const toggleSwitch = () => setDark((prevState) => !prevState);
   const [trails, setTrails] = useState([]);
+  const [heatMapStats, setHeatMapStats] = useState([]);
+
+  const [like, setLike] = useState(false);
+  const heartChange = () => setLike((prev) => !prev);
 
   useEffect(() => {
-    fetch("http://192.168.1.3:5001/api/getData")
+    fetch(`http://${secret.ip_address}:5001/api/getData`)
       .then((res) => res.json())
-      .then((res) => setTrails(res))
+      .then((res) => {
+        setHeatMapStats(res.heatMapStats);
+        setTrails(res.trailNames);
+      })
+
       .catch((err) => console.log(err));
   }, []);
 
@@ -47,7 +56,7 @@ export function MapPage() {
           style={{
             alignItems: "center",
             justifyContent: "center",
-            paddingTop: 20,
+            paddingTop: 35,
           }}
         >
           <Switch
@@ -59,33 +68,34 @@ export function MapPage() {
           />
         </View>
 
-        {trails.map((marker, i) => (
-          <Marker
-            key={i}
-            coordinate={{
-              latitude: marker.latitude,
-              longitude: marker.longitude,
-            }}
-          >
-            <Callout tooltip>
-              <View>
-                <View style={styles.bubble}>
-                  <Text style={styles.name}>
-                    Trail Name{" "}
+        {heatMapStats.map((marker, i) => {
+          return (
+            <Marker
+              key={i}
+              coordinate={{
+                latitude: marker.latitude,
+                longitude: marker.longitude,
+              }}
+            >
+              <Callout tooltip>
+                <View>
+                  <View style={styles.bubble}>
+                    <Text style={styles.name}>{trails[i]}</Text>
                     <Ionicons
-                      name="ios-heart-empty"
-                      style={{ fontSize: 20, alignItems: "flex-end" }}
+                      name="ios-heart"
+                      style={like ? styles.heartIconRed : styles.heartIconGray}
+                      onPress={heartChange}
                     />
-                  </Text>
+                  </View>
+                  <View style={styles.arrowBorder} />
+                  <View style={styles.arrow} />
                 </View>
-                <View style={styles.arrowBorder} />
-                <View style={styles.arrow} />
-              </View>
-            </Callout>
-          </Marker>
-        ))}
+              </Callout>
+            </Marker>
+          );
+        })}
         <Heatmap
-          points={trails}
+          points={heatMapStats}
           radius={50}
           gradient={{
             colors: ["#0DE5FF", "#0D14FF", "#980DFF", "#FF0DED", "#E50000"],
@@ -98,6 +108,7 @@ export function MapPage() {
   );
 }
 
+// Map styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -139,14 +150,26 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     marginBottom: 5,
+    alignItems: "center",
   },
   // Character image
   image: {
     width: "100%",
     height: 80,
   },
+  heartIconRed: {
+    color: "red",
+    fontSize: 25,
+    alignItems: "flex-end",
+  },
+  heartIconGray: {
+    color: "#DCDCDC",
+    fontSize: 25,
+    alignItems: "flex-end",
+  },
 });
 
+// Map dark mode
 const mapDarkMode = [
   {
     elementType: "geometry",
