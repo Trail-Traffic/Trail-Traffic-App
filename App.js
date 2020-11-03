@@ -1,102 +1,10 @@
-import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  Image,
-  Alert,
-  Modal,
-  TouchableHighlight,
-  TouchableOpacity,
-  ScrollView,
-  SafeAreaView,
-} from "react-native";
-import { Card, ListItem } from "react-native-elements";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import Icon from "react-native-vector-icons/FontAwesome";
 import { MapPage } from "./screens/MapPage.jsx";
 import { Splash } from "./screens/SplashLoginPage.jsx";
-import secret from "./secrets";
-
-// import {
-//   GoogleSignin,
-//   GoogleSigninButton,
-//   statusCodes,
-// } from "@react-native-community/google-signin";
-
-// GoogleSignin.configure();
-
-//========================================= FAVORITES PAGE ================================================//
-
-function Favorites({ navigation, route }) {
-  const { userInfo } = route.params;
-  const [faves, setFaves] = useState([]);
-
-  useEffect(() => {
-    // console.log("in fave useEffect");
-    fetch(
-      `http://${secret.ip_address}:5001/api/getFaves?user_id=${userInfo.id}`
-    )
-      .then((res) => res.json())
-      .then((parsedRes) => setFaves(parsedRes))
-      .catch((err) => console.log(err));
-  }, []);
-
-  return (
-    <SafeAreaView style={styles.faveContainer}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.titleBar}>
-          <Button
-            title="Back to Map"
-            onPress={() => navigation.navigate("Map", { userInfo })}
-          />
-          <Button title="Logout" onPress={() => navigation.navigate("Login")} />
-        </View>
-        <View style={{ alignSelf: "center" }}>
-          <View style={styles.profileImage}>
-            <Image
-              source={{ uri: userInfo.photourl }}
-              style={styles.image}
-            ></Image>
-          </View>
-          <View style={styles.add}>
-            <Ionicons
-              name="ios-add"
-              size={48}
-              color="#DFD8C8"
-              style={{ marginTop: 6, marginLeft: 2 }}
-            ></Ionicons>
-          </View>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>
-            {userInfo.name}
-          </Text>
-        </View>
-        <View style={styles.faveTitle}>
-          <Text style={[styles.text, { fontSize: 24 }]}>Favorite Trails</Text>
-        </View>
-        {faves.map((trail, i) => {
-          return (
-            <Card key={i}>
-              <ListItem>
-                <Text style={styles.trailListText}>{trail}</Text>
-                <Ionicons
-                  key={i}
-                  name="ios-heart"
-                  style={styles.heartIconRed}
-                />
-              </ListItem>
-            </Card>
-          );
-        })}
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
+import { Faves } from "./screens/Faves"
 
 //========================================= MAIN APP COMPONENT ================================================//
 
@@ -125,8 +33,8 @@ export default function App() {
           }}
         />
         <Tab.Screen
-          name="Favorites"
-          component={Favorites}
+          name="Faves"
+          component={Faves}
           options={{
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="ios-heart" color={color} size={size} />
@@ -137,92 +45,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-//========================================= STYLING ================================================//
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "red",
-  },
-  faveContainer: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  map: {
-    flex: 1,
-  },
-  googleButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderWidth: 0.5,
-    borderColor: "#fff",
-    height: 40,
-    borderRadius: 5,
-    margin: 5,
-  },
-  googleText: {
-    color: "#616161",
-    fontSize: 14,
-  },
-  titleBar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 24,
-    marginHorizontal: 16,
-  },
-  profileImage: {
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    overflow: "hidden",
-  },
-  image: {
-    flex: 1,
-    height: undefined,
-    width: undefined,
-  },
-  infoContainer: {
-    alignSelf: "center",
-    alignItems: "center",
-    marginTop: 16,
-  },
-  text: {
-    fontFamily: "HelveticaNeue",
-    color: "#52575D",
-  },
-  faveTitle: {
-    flexDirection: "row",
-    alignSelf: "center",
-    marginTop: 45,
-  },
-  add: {
-    backgroundColor: "#41444B",
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    width: 55,
-    height: 55,
-    borderRadius: 30,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  cardContainer: {
-    display: "flex",
-  },
-  heartIconRed: {
-    color: "red",
-    fontSize: 25,
-    alignItems: "flex-end",
-  },
-  heartIconGray: {
-    color: "#DCDCDC",
-    fontSize: 25,
-    alignItems: "flex-end",
-  },
-  trailListText: {
-    fontSize: 20,
-    textAlign: "center",
-  },
-});

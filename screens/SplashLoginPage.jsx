@@ -1,25 +1,15 @@
 import React, { Component, useEffect, useState } from "react";
 import {
   StyleSheet,
-  Text,
   View,
-  Button,
   Image,
-  Alert,
-  Modal,
-  TouchableHighlight,
   TouchableOpacity,
-  ScrollView,
-  SafeAreaView,
   TouchableWithoutFeedback,
 } from "react-native";
 import * as Google from "expo-google-app-auth";
 import secret from "../secrets";
-import { MapPage } from "./MapPage.jsx";
-import App from "../App";
 
 const IOS_CLIENT_ID = secret.google_client_id;
-const FB_APP_ID = secret.facebook_app_id;
 
 export function Splash({ navigation }) {
   signInWithGoogle = async () => {
@@ -48,7 +38,7 @@ export function Splash({ navigation }) {
           .then((res) => res.json())
           .then((userInfo) => {
             //reroute to map view with userInfo passed into params
-            navigation.navigate("Favorites", {
+            navigation.navigate("Faves", {
               userInfo,
             });
           });
