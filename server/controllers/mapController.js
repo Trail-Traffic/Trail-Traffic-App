@@ -45,7 +45,6 @@ mapController.getHeat = (req, res, next) => {
       fetch(`https://besttime.app/api/v1/forecasts/now?api_key_public=${publicKey}&venue_id=${locations[trail]}`)
       .then((data) => {
         data.json().then((parsedData) => {
-          // console.log('data returned from API', parsedData)
           const trailName = parsedData.venue_info.venue_name;
           const weight = conversion[parsedData.analysis.hour_analysis.intensity_nr];
           const trailData = {
@@ -75,7 +74,6 @@ mapController.getHeat = (req, res, next) => {
       const heatMapStats = [];
       const trailNames = [];
       trailDataArray.forEach(dataObj => {
-        console.log(dataObj);
         heatMapStats.push(dataObj.heatMap);
         trailNames.push(dataObj.trailName);
       })
