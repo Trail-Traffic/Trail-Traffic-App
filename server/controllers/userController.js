@@ -27,7 +27,6 @@ userController.addUser = (req, res, next) => {
 
 // ***** Get favorites, returns array of favorite names ***** //
 userController.getFavorites = async (req, res, next) => {
-  console.log('in userController getFaves', req.query)
   try {
     const queryText = 'SELECT trail_name FROM faves WHERE user_id=$1;';
     const { user_id } = req.query;

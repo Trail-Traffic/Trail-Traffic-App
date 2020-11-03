@@ -9,15 +9,10 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
-  Switch,
-  Modal,
-  TouchableHighlight,
-  TouchableOpacity,
+  Switch
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import secret from "../secrets";
-// import {useTheme} from '@react-navigation/native'
 
 export function MapPage({ route }) {
   const [dark, setDark] = useState(false);
